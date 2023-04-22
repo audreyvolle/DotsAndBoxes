@@ -1,9 +1,8 @@
 /*
 CS 438 Dots and Boxes
-v2.cpp: uses basic game logic
+v2.cpp: uses basic game logic but does not check neighbors
     1)AI should priority play "1" at a square with 3 positions already played
     2) next priority play square with 0 or 1 positions played
-        - check adjacent squares
     3) least priority is square with 2 plays
 */
 #include <cstring>
@@ -14,6 +13,7 @@ v2.cpp: uses basic game logic
 #include <stdio.h>
 #include <algorithm>
 #include <sstream>
+
 const int row = 5;
 const int col = 5;
 struct Square
@@ -74,7 +74,6 @@ void read()
     fclose(fp);
 }
 
-
 void editAdjacent(int r, int c, std::string level)
 {
     if (level == "top")
@@ -107,13 +106,179 @@ void editAdjacent(int r, int c, std::string level)
     }
 }
 
-int checkAdjacent(int r, int c)
+
+void betterBest()
 {
+    std::vector<std::pair<int, int>> move3;
+    std::vector<std::pair<int, int>> move2;
+    std::vector<std::pair<int, int>> move1;
+    std::vector<std::pair<int, int>> move0;
+    std::vector<std::string> move3val;
+    std::string level[4];
+    level[0] = "top";
+    level[1] = "right";
+    level[2] = "bottom";
+    level[3] = "left";
+    std::string best;
+    int heuristic = -1;
+    int bestheuristic = -1;
+    int played;
+    for (int r = 0; r < row; r++)
+    {
+        for (int c = 0; c < col; c++)
+        {
+            played = 0;
+            // Check if the current square has 3 positions already played
+            if (squares[r][c].top)
+            {
+                played++;
+            }
+            if (squares[r][c].right)
+            {
+                played++;
+            }
+            if (squares[r][c].bottom)
+            {
+                played++;
+            }
+            if (squares[r][c].left)
+            {
+                played++;
+            }
+
+            if (played == 3)
+            {
+                move3.push_back(std::make_pair(r, c));
+            }
+            if (played == 2)
+            {
+                move2.push_back(std::make_pair(r, c));
+            }
+            if (played == 1)
+            {
+                move1.push_back(std::make_pair(r, c));
+            }
+            if (played == 0)
+            {
+                move0.push_back(std::make_pair(r, c));
+            }
+        }
+    }
+
+    if (move3.size() != 0)
+    {
+        if (!squares[move3[0].first][move3[0].second].top)
+        {
+            squares[move3[0].first][move3[0].second].top = 1;
+            editAdjacent(move3[0].first, move3[0].second, "top");
+            return;
+        }
+        if (!squares[move3[0].first][move3[0].second].right)
+        {
+            squares[move3[0].first][move3[0].second].right = 1;
+            editAdjacent(move3[0].first, move3[0].second, "right");
+            return;
+        }
+        if (!squares[move3[0].first][move3[0].second].bottom)
+        {
+            squares[move3[0].first][move3[0].second].bottom = 1;
+            editAdjacent(move3[0].first, move3[0].second, "bottom");
+            return;
+        }
+        if (!squares[move3[0].first][move3[0].second].left)
+        {
+            squares[move3[0].first][move3[0].second].left = 1;
+            editAdjacent(move3[0].first, move3[0].second, "left");
+            return;
+        }
+    }
+    else if (move1.size() != 0)
+    {
+        if (!squares[move1[0].first][move1[0].second].top)
+        {
+            squares[move1[0].first][move1[0].second].top = 1;
+            editAdjacent(move1[0].first, move1[0].second, "top");
+            return;
+        }
+        if (!squares[move1[0].first][move1[0].second].right)
+        {
+            squares[move1[0].first][move1[0].second].right = 1;
+            editAdjacent(move1[0].first, move1[0].second, "right");
+            return;
+        }
+        if (!squares[move1[0].first][move1[0].second].bottom)
+        {
+            squares[move1[0].first][move1[0].second].bottom = 1;
+            editAdjacent(move1[0].first, move1[0].second, "bottom");
+            return;
+        }
+        if (!squares[move1[0].first][move1[0].second].left)
+        {
+            squares[move1[0].first][move1[0].second].left = 1;
+            editAdjacent(move1[0].first, move1[0].second, "left");
+            return;
+        }
+    }
+    else if (move0.size() != 0)
+    {
+        if (!squares[move0[0].first][move0[0].second].top)
+        {
+            squares[move0[0].first][move0[0].second].top = 1;
+            editAdjacent(move0[0].first, move0[0].second, "top");
+            return;
+        }
+        if (!squares[move0[0].first][move0[0].second].right)
+        {
+            squares[move0[0].first][move0[0].second].right = 1;
+            editAdjacent(move0[0].first, move0[0].second, "right");
+            return;
+        }
+        if (!squares[move0[0].first][move0[0].second].bottom)
+        {
+            squares[move0[0].first][move0[0].second].bottom = 1;
+            editAdjacent(move0[0].first, move0[0].second, "bottom");
+            return;
+        }
+        if (!squares[move0[0].first][move0[0].second].left)
+        {
+            squares[move0[0].first][move0[0].second].left = 1;
+            editAdjacent(move0[0].first, move0[0].second, "left");
+            return;
+        }
+    }
+    else if (move2.size() != 0)
+    {
+        if (!squares[move2[0].first][move2[0].second].top)
+        {
+            squares[move2[0].first][move2[0].second].top = 1;
+            editAdjacent(move2[0].first, move2[0].second, "top");
+            return;
+        }
+        if (!squares[move2[0].first][move2[0].second].right)
+        {
+            squares[move2[0].first][move2[0].second].right = 1;
+            editAdjacent(move2[0].first, move2[0].second, "right");
+            return;
+        }
+        if (!squares[move2[0].first][move2[0].second].bottom)
+        {
+            squares[move2[0].first][move2[0].second].bottom = 1;
+            editAdjacent(move2[0].first, move2[0].second, "bottom");
+            return;
+        }
+        if (!squares[move2[0].first][move2[0].second].left)
+        {
+            squares[move2[0].first][move2[0].second].left = 1;
+            editAdjacent(move2[0].first, move2[0].second, "left");
+            return;
+        }
+    }
+    else
+    {
+        return;
+    }
 }
 
-void best()
-{
-}
 
 void printBoardToFile()
 {
@@ -146,11 +311,10 @@ void printBoardToFile()
     }
 }
 
-
 int main()
 {
     read();
-    best();
+    betterBest();
     printBoardToFile();
     return 1;
 }
