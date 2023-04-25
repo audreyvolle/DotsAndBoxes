@@ -1,18 +1,16 @@
-# Dots And Boxes
+# Dots And Boxes Input Programs
 
-### Authors:
+<!---### Authors:-->
 
 ## Game Descripton
 
 https://en.wikipedia.org/wiki/Dots_and_boxes
 
-## How to use
+<!---## How to use-->
 
 
 
-
-
-Input Programs:
+## Input Programs Guide:
 - v1: very very basic implementation that plays the first blank move that it finds (no logic)
 - v2: uses basic game logic but does not check neighbors
 <!---
