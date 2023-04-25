@@ -18,3 +18,5 @@ https://en.wikipedia.org/wiki/Dots_and_boxes
 - v4: uses ____ algorithm to find best play
 -->
 - v3: ____
+
+add line to top of file for visual studios compilation: #define _CRT_SECURE_NO_WARNINGS
