@@ -1,6 +1,6 @@
 /*
 CS 438 Dots and Boxes
-v1.1.cpp: very very basic fixed (dynamic board sizes and 0,0 is bottom left) implementation that plays the first blank move that it finds (no logic)
+v1.cpp: very very basic fixed (dynamic board sizes and 0,0 is bottom left) implementation that plays the first blank move that it finds (no logic)
 */
 #include <cstring>
 #include <iostream>
@@ -51,135 +51,7 @@ int readDimension()
     return dim;
 }
 
-// works for 5
-/*void read(int dim)
-{
-    FILE *fp;
-    fp = fopen("squares.board", "r");
-
-    if (fp == NULL)
-    {
-        std::cout << "Error opening file!" << std::endl;
-        return;
-    }
-
-    // Read data lines
-    for (int r = 0; r < dim; r++)
-    {
-        // Parse line
-        char line[256];
-        if (fgets(line, sizeof(line), fp) == NULL)
-        {
-            std::cout << "Error parsing file!" << std::endl;
-            fclose(fp);
-            return;
-        }
-
-        int top[dim], right[dim], bottom[dim], left[dim];
-        char owner[dim][256];
-
-        // Extract values from line
-        if (sscanf(line, "{%d, %d, %d, %d, %255[^}]} {%d, %d, %d, %d, %255[^}]} {%d, %d, %d, %d, %255[^}]} {%d, %d, %d, %d, %255[^}]} {%d, %d, %d, %d, %255[^}]}", &top[0], &right[0], &bottom[0], &left[0], owner[0], &top[1], &right[1], &bottom[1], &left[1], owner[1], &top[2], &right[2], &bottom[2], &left[2], owner[2], &top[3], &right[3], &bottom[3], &left[3], owner[3], &top[4], &right[4], &bottom[4], &left[4], owner[4]) != 25)
-        {
-            std::cout << "Error parsing file!" << std::endl;
-            fclose(fp);
-            return;
-        }
-
-        for (int c = 0; c < dim; c++)
-        {
-            squares[r][c].top = top[c];
-            squares[r][c].right = right[c];
-            squares[r][c].bottom = bottom[c];
-            squares[r][c].left = left[c];
-            squares[r][c].owner = std::string(owner[c]);
-        }
-    }
-
-    fclose(fp);
-}*/
-
 void read(int dim)
-{
-    FILE *fp;
-    fp = fopen("squares.board", "r");
-
-    if (fp == NULL)
-    {
-        std::cout << "Error opening file!" << std::endl;
-        return;
-    }
-    // read and ignore the first line
-    char line0[256];
-    if (fgets(line0, sizeof(line0), fp) == NULL)
-    {
-        std::cout << "Error parsing file!" << std::endl;
-        fclose(fp);
-        return;
-    }
-    else
-    {
-        int dim;
-        if (sscanf(line0, "%d", &dim) != 1)
-        {
-            std::cout << "Error reading integer!" << std::endl;
-            fclose(fp);
-            return;
-        }
-    }
-
-    // Read data lines
-    for (int r = 0; r < dim; r++)
-    {
-        // Parse line
-        char line[256];
-        if (fgets(line, sizeof(line), fp) == NULL)
-        {
-            std::cout << "Error parsing file!" << std::endl;
-            fclose(fp);
-            return;
-        }
-
-        int top[dim], right[dim], bottom[dim], left[dim];
-        char owner[dim][256];
-        // need to read in the text below from the file, but the number of {} in a row and column is variable and depeds on "dim";
-        /*{0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none}
-        {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none}
-        {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none}
-        {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none}
-        {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none} {0, 0, 0, 0, none}*/
-        // Parse the row data
-        char *token = strtok(line, "} ");
-        for (int c = 0; c < dim; c++)
-        {
-            if (token == NULL)
-            {
-                std::cout << "Error parsing file!" << std::endl;
-                fclose(fp);
-                return;
-            }
-            //{%d, %d, %d, %d, %255[^}]}
-            if (sscanf(token, "{%d, %d, %d, %d, %255[^}]}", &top[c], &right[c], &bottom[c], &left[c], owner[c]) != 5)
-            {
-                std::cout << "Error reading board data!" << std::endl;
-                fclose(fp);
-                return;
-            }
-            std::cout << "Owner "<< c<< " " << owner[c] << std::endl;
-            token = strtok(NULL, "} ");
-            for (int c = 0; c < dim; c++)
-            {
-                squares[r][c].top = top[c];
-                squares[r][c].right = right[c];
-                squares[r][c].bottom = bottom[c];
-                squares[r][c].left = left[c];
-                squares[r][c].owner = std::string(owner[c]);
-            }
-        }
-    }
-}
-
-void read2(int dim)
 {
     FILE *fp;
     fp = fopen("squares.board", "r");
@@ -366,7 +238,7 @@ int main()
     int dim = readDimension();
     if (dim != -1)
     {
-        read2(dim);
+        read(dim);
         best(dim);
         printBoardToFile(dim);
     }
