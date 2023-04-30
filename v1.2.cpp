@@ -24,43 +24,17 @@ struct Square
 
 Square squares[MAXROW][MAXCOL];
 
-int readDimension()
+
+int read()
 {
     FILE *fp;
     int dim;
-    fp = fopen("squares.board", "r");
-    char line[256];
-    if (fgets(line, sizeof(line), fp) == NULL)
-    {
-        std::cout << "Error parsing file!" << std::endl;
-        fclose(fp);
-        return -1;
-    }
-    else
-    {
-        if (sscanf(line, "%d", &dim) != 1)
-        {
-            std::cout << "Error reading integer!" << std::endl;
-            fclose(fp);
-            return -1;
-        }
-
-        std::cout << "Dimension: " << dim << std::endl;
-
-        fclose(fp); // close the file
-    }
-    return dim;
-}
-
-void read(int dim)
-{
-    FILE *fp;
     fp = fopen("squares.board", "r");
 
     if (fp == NULL)
     {
         std::cout << "Error opening file!" << std::endl;
-        return;
+        return -1;
     }
 
     // read and ignore the first line
@@ -69,7 +43,7 @@ void read(int dim)
     {
         std::cout << "Error parsing file!" << std::endl;
         fclose(fp);
-        return;
+        return -1;
     }
     else
     {
@@ -77,8 +51,9 @@ void read(int dim)
         {
             std::cout << "Error reading integer!" << std::endl;
             fclose(fp);
-            return;
+            return -1;
         }
+        std::cout << "Dimension: " << dim << std::endl;
     }
 
     // Read data lines
@@ -90,11 +65,11 @@ void read(int dim)
         {
             std::cout << "Error parsing file!" << std::endl;
             fclose(fp);
-            return;
+            return -1;
         }
 
-        int top[dim], right[dim], bottom[dim], left[dim];
-        char owner[dim][256];
+        int top[MAXCOL], right[MAXCOL], bottom[MAXCOL], left[MAXCOL];
+        char owner[MAXCOL][256];
 
         // Initialize owner array
         for (int c = 0; c < dim; c++)
@@ -110,13 +85,13 @@ void read(int dim)
             {
                 std::cout << "Error parsing file!" << std::endl;
                 fclose(fp);
-                return;
+                return -1;
             }
             if (sscanf(token, " {%d, %d, %d, %d, %255[^}]} ", &top[c], &right[c], &bottom[c], &left[c], owner[c]) != 5)
             {
                 std::cout << "Error reading board data!" << std::endl;
                 fclose(fp);
-                return;
+                return -1;
             }
             token = strtok(NULL, "}");
             squares[r][c].top = top[c];
@@ -127,6 +102,7 @@ void read(int dim)
         }
     }
     fclose(fp);
+    return dim;
 }
 
 void editAdjacent(int r, int c, std::string level, int dim)
@@ -262,10 +238,9 @@ void printBoardToFile(int dim)
 }
 int main()
 {
-    int dim = readDimension();
+    int dim = read();
     if (dim != -1)
     {
-        read(dim);
         best(dim);
         printBoardToFile(dim);
     }
