@@ -19,6 +19,20 @@ https://en.wikipedia.org/wiki/Dots_and_boxes
   - v2.2: same logic as v1.1 but checks adjacent square before playing move
 - v3: extremely broken alpha-beta
 
+## squares.board Guide
+- Fist line of file is a single digit n that represents the board size (ex. 6 would represent 6 by 6 square board)
+- Next n lines each have n struct representations as follows: 
+
+{bool top, bool right, bool bottom, bool left,  string owner}
+
+  - bool values:
+      - 1 = played
+      - 0 = blank
+  - owner values:
+      - red
+      - blue 
+      - none
+
 
 ## Other Notes
 - Add line to top of file for visual studios compilation: #define _CRT_SECURE_NO_WARNINGS
